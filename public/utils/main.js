@@ -1,19 +1,24 @@
-document.getElementById('taskForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
+document
+.getElementById("taskForm")
+.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-    try {
-        const response = await fetch('/taskAdd', {
-            method: 'POST',
-            body: formData,
-        });
+  const tarefa = document.getElementById("tarefa").value;
+  const descricao = document.getElementById("descricao").value;
+  const responsavel = document.getElementById("responsavel").value;
 
-        const data = await response.json();
+  try {
+    const response = await fetch("/taskAdd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ tarefa, descricao, responsavel }),
+    });
 
-        // Exibir a lista de tarefas ou realizar outras ações necessárias
-        console.log(data);
-
-    } catch (error) {
-        console.error('Erro ao criar tarefa:', error);
-    }
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
 });

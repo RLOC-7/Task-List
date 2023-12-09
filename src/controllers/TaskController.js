@@ -3,11 +3,12 @@ import TaskService from "../services/TaskServices.js";
 const taskService = new TaskService();
 
 class TaskController {
+  
   async addTask(req, res) {
-    const { responsavel, tarefa, descricao } = req.body;
+    const { tarefa, descricao, responsavel } = req.body;
 
     try {
-      const task = await taskService.addTask({ responsavel, tarefa, descricao });
+      const task = await taskService.addTask({ tarefa, descricao, responsavel });
       res.status(201).json(task);
     } catch (error) {
       console.error(error);

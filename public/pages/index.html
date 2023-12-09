@@ -1,41 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
     <title>Tarefas</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Cadastro</a></li>
-                <li><button id="modoNoturnoBtn" onclick="toggleModoNoturno()">Modo Noturno</button></li>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Cadastro</a></li>
+          <li>
+            <button id="modoNoturnoBtn" onclick="toggleModoNoturno()">
+              Modo Noturno
+            </button>
+          </li>
+        </ul>
+      </nav>
     </header>
     <div class="task-form-container">
-        <form action="/taskAdd" method="POST" class="task-form">
-            <div class="form-group">
-                <label for="responsavel">Responsável:</label>
-                <input type="text" id="responsavel" name="responsavel" placeholder="Informe o responsável" required>
-            </div>
-            <div class="form-group">
-                <label for="tarefa">Tarefa:</label>
-                <input type="text" id="tarefa" name="tarefa" placeholder="Informe a tarefa" required>
-            </div>
-            <div class="form-group">
-                <label for="descricao">Descrição:</label>
-                <textarea id="descricao" name="descricao" placeholder="Descreva a tarefa" style="resize: none;" required></textarea>
-            </div>
-            <input type="submit" value="Criar Tarefa">
-        </form>
+      <form action="/taskAdd" method="POST" class="task-form">
+        <div class="form-group">
+          <label for="tarefa">Tarefa:</label>
+          <input
+            type="text"
+            id="tarefa"
+            name="tarefa"
+            placeholder="Informe a tarefa"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição:</label>
+          <textarea
+            id="descricao"
+            name="descricao"
+            placeholder="Descreva a tarefa"
+            style="resize: none"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="responsavel">Responsável:</label>
+          <input
+            type="text"
+            id="responsavel"
+            name="responsavel"
+            placeholder="Informe o responsável"
+            required
+          />
+        </div>
+        <input type="submit" value="Criar Tarefa" />
+      </form>
     </div>
 
-    <!-- Adicione um arquivo JavaScript para controlar o modo noturno -->
     <script src="utils/modoNoturno.js"></script>
     <script src="utils/main.js"></script>
-</body>
+  </body>
 </html>

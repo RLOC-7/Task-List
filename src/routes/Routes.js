@@ -8,26 +8,19 @@ const router = express.Router();
 
 router.use(middlewares);
 
-
 router.get("/", async (req, res) => {
   res.sendFile(indexPath);
 });
 
 router.post("/taskAdd", async (req, res) => {
-  const { tarefa, descricao, responsavel } = req.body;
-
   try {
-    const task = await taskController.addTask({
-      tarefa,
-      descricao,
-      responsavel
-    });
-    res.status(201).json(task);
+    await taskController.addTask(req, res);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao criar tarefa." });
   }
 });
+
 
 router.get("/tasks", async (req, res) => {
   try {
@@ -51,6 +44,19 @@ router.get("/task/:id", async (req, res) => {
   }
 });
 
+router.delete("/delete/task/:id", async (req, res) => {
+  const taskId = req.params.id;
+
+  try {
+    const deletedTask = await taskController.taskDelete(taskId);
+    res
+      .status(200)
+      .json({ message: "Tarefa excluída com sucesso.", deletedTask });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao excluir tarefa." });
+  }
+});
 
 router.put("/update/task/:id", async (req, res) => {
   const { id: taskId } = req.params;
@@ -65,17 +71,27 @@ router.put("/update/task/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete/task/:id", async (req, res) => {
-  const taskId = req.params.id;
+router.put('/complete/task/:id', async (req, res) => {
+  const { id: taskId } = req.params;
 
   try {
-    const deletedTask = await taskController.taskDelete(taskId);
-    res
-      .status(200)
-      .json({ message: "Tarefa excluída com sucesso.", deletedTask });
+    const updatedTask = await taskController.markTaskAsCompleted(taskId);
+    res.status(200).json(updatedTask);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao excluir tarefa." });
+    res.status(500).json({ error: 'Erro ao marcar tarefa como concluída.' });
+  }
+});
+
+router.put('/incomplete/task/:id', async (req, res) => {
+  const { id: taskId } = req.params;
+
+  try {
+    const updatedTask = await taskController.markTaskAsIncomplete(taskId);
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao marcar tarefa como não concluída.' });
   }
 });
 

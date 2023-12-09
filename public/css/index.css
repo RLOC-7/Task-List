@@ -1,0 +1,140 @@
+:root {
+    --darkreader-netral-background: #131516;
+    --darkreader-newtral-text: #d8d4cf;
+    --darkreader-selection-background: #004daa;
+    --darkreader-selection-text: #e8e6e3;
+}
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: #e8e6e3;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    margin-right: 10px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease;
+}
+
+nav a:hover {
+    border-bottom: 2px solid #fff;
+}
+.task-form-container {
+    max-width: 30%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(30, 32, 33);;
+    border-radius: 8px;
+    box-shadow: rgba(56, 56, 56, 0.1) 0px 0px 10px;
+
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input, textarea {
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+input[type="submit"] {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    background-color: #630bf1;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0edf5e;
+
+}
+
+#modoNoturnoBtn {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#modoNoturnoBtn:hover {
+    background-color: #555;
+}
+
+
+/* MODO NOTURNO */
+
+body.modo-noturno #modoNoturnoBtn {
+    background-color: #555;
+    color: #fff;
+}
+
+body.modo-noturno {
+    background-color: var(--darkreader-netral-background);
+    color: var(--darkreader-newtral-text);
+}
+
+header.modo-noturno {
+    background-color: rgb(38, 42, 43);;
+}
+
+nav a.modo-noturno {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+.task-form-container.modo-noturno {
+    background-color: #444;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+input[type="submit"].modo-noturno {
+    background-color: #555;
+}
+
+input[type="submit"].modo-noturno:hover {
+    background-color: #333;
+}

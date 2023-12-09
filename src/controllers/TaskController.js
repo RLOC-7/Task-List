@@ -6,6 +6,10 @@ const taskService = new TaskService();
 
 class TaskController {
   
+  constructor() {
+    this.taskService = new TaskService();
+  }
+
   async addTask(req, res) {
     try {
       const { tarefa, descricao, responsavel } = req.body;
@@ -24,13 +28,14 @@ class TaskController {
   
   async taskList(req, res) {
     try {
-      const tasks = await taskService.taskList();
+      const tasks = await this.taskService.taskList();
       res.status(200).json(tasks);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Erro ao listar tarefas." });
+      res.status(500).send("Erro ao obter a lista de tarefas.");
     }
   }
+
 
   async taskListOne(req, res) {
     const taskId = req.params.id;

@@ -21,16 +21,8 @@ router.post("/taskAdd", async (req, res) => {
   }
 });
 
+router.get('/tasks', (req, res) => taskController.taskList(req, res));
 
-router.get("/tasks", async (req, res) => {
-  try {
-    const tasks = await taskController.taskList();
-    res.status(200).json(tasks);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao listar tarefas." });
-  }
-});
 
 router.get("/task/:id", async (req, res) => {
   const taskId = req.params.id;

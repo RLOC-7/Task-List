@@ -3,28 +3,29 @@ import pool from "../database/connection.js";
 import TaskModel from '../models/TaskModel.js';
 
 class TaskService {
-  
-  constructor() {
-    this.tasks = []; // Inicializar a lista de tarefas vazia
-  }
 
+  constructor() {
+    // Configuração do pool
+    this.tasks = []; // Inicializar a lista de tarefas vazia
+    this.connection = pool;
+    
+  }
   async addTask({ tarefa, descricao, responsavel }) {
     try {
-        const [result] = await pool.execute('INSERT INTO tasks (tarefa, descricao, responsavel) VALUES (?, ?, ?)', [tarefa, descricao, responsavel]);
+      const [result] = await pool.execute('INSERT INTO tasks (tarefa, descricao, responsavel) VALUES (?, ?, ?)', [tarefa, descricao, responsavel]);
 
-        const taskId = result.insertId;
-        const newTask = new TaskModel(taskId, tarefa, descricao, responsavel);
-        return newTask;
+      const taskId = result.insertId;
+      const newTask = new TaskModel(taskId, tarefa, descricao, responsavel);
+      return newTask;
     } catch (error) {
-        console.error(error);
-        throw new Error("Erro ao criar tarefa.");
+      console.error(error);
+      throw new Error("Erro ao criar tarefa.");
     }
-}
-
+  }
 
   async taskList() {
     try {
-      const [rows] = await pool.promise().execute('SELECT * FROM tasks');
+      const [rows] = await this.connection.execute('SELECT * FROM tasks');
       console.log(rows);
       return rows;
     } catch (error) {
@@ -32,10 +33,10 @@ class TaskService {
       throw new Error("Erro ao listar tarefas.");
     }
   }
-  
+
   async taskListOne(id) {
     try {
-      const [rows] = await pool.promise().execute(
+      const [rows] = await this.connection.execute(
         'SELECT * FROM tasks WHERE id = ?',
         [id]
       );
@@ -53,7 +54,7 @@ class TaskService {
 
   async taskUpdate(id, descricao) {
     try {
-      await pool.promise().execute(
+      await this.connection.execute(
         'UPDATE tasks SET descricao = ? WHERE id = ?',
         [descricao, id]
       );
@@ -65,11 +66,11 @@ class TaskService {
       throw new Error("Erro ao atualizar tarefa.");
     }
   }
-
+ 
   async taskDelete(id) {
     try {
       const deletedTask = await this.taskListOne(id);
-      await pool.promise().execute(
+      await this.connection.execute(
         'DELETE FROM tasks WHERE id = ?',
         [id]
       );

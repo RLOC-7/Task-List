@@ -36,32 +36,43 @@ class TaskController {
     }
   }
 
-
-  async taskListOne(req, res) {
-    const taskId = req.params.id;
-
+  async taskListOne(taskId) {
     try {
-      const oneTask = await taskService.taskListOne(taskId);
-      res.status(200).json(oneTask);
+      const taskDetails = await this.taskService.taskListOne(taskId);
+      return taskDetails;
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Erro ao obter tarefa mencionada." });
+      throw error; // Deixe o tratamento do erro para a rota
     }
   }
-
+  
   async taskUpdate(req, res) {
-    const { id: taskId } = req.params;
-    const { descricao } = req.body;
+    console.log('Received PUT request:', req.params, req.body);
 
     try {
-      const updatedTask = await taskService.taskUpdate(taskId, descricao);
-      res.status(200).json(updatedTask);
+      const { id: taskId } = req.params;
+      console.log('Task ID from params:', taskId);
+    
+      const { descricao } = req.body;
+      console.log('Description from body:', descricao);
+    
+      // Adicione esse log para verificar o conteúdo de taskId antes da chamada da função
+      console.log('Calling taskUpdate with taskId:', taskId);
+    
+      const updatedTask = await this.taskService.taskUpdate(taskId, descricao);
+      res.json(updatedTask);
+    
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Erro ao atualizar tarefa." });
-    }
+    
+      if (res && typeof res.status === 'function') {
+        res.status(500).json({ error: "Erro ao atualizar tarefa." });
+      } else {
+        console.error("Erro ao manipular resposta. Resposta inválida:", res);
+      }
+    }    
   }
-
+  
   async taskDelete(req, res) {
     const taskId = req.params.id;
 

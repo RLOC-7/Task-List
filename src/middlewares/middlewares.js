@@ -17,8 +17,8 @@ router.use((req, res, next) => {
   next();
 });
 
-router.use(express.static(path.join(__dirname, "../../public")));
 router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+// router.use(express.urlencoded({ extended: true }));
+router.use(express.static(path.join(__dirname, "../../public")));
 
 export { router, indexPath };

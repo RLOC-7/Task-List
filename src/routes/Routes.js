@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   res.sendFile(indexPath);
 });
 
-router.post("/taskAdd", async (req, res) => {
+router.post("/add/task", async (req, res) => {
   try {
     await taskController.addTask(req, res);
   } catch (error) {
@@ -21,10 +21,7 @@ router.post("/taskAdd", async (req, res) => {
   }
 });
 
-router.get('/tasks', (req, res) => taskController.taskList(req, res));
-
-
-router.get("/task/:id", async (req, res) => {
+router.get('/task/:id', async (req, res) => {
   const taskId = req.params.id;
 
   try {
@@ -32,9 +29,38 @@ router.get("/task/:id", async (req, res) => {
     res.status(200).json(oneTask);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao obter tarefa mencionada." });
+    if (error.message.includes('não encontrada')) {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro ao obter detalhes da tarefa.' });
+    }
   }
 });
+
+router.get('/list/task', (req, res) => taskController.taskList(req, res));
+
+router.put("/update/task/:id", async (req, res) => {
+  console.log('Received PUT request:', req.params, req.body);
+  
+  const { id } = req.params;
+  console.log('Task ID from params:', id);
+
+  const taskId = parseInt(id, 10);
+  console.log('Parsed Task ID:', taskId);
+  
+  const { descricao } = req.body;
+  console.log('Description from body:', descricao);
+
+  try {
+    const updatedTask = await taskController.taskUpdate(taskId, descricao);
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao atualizar tarefa." });
+  }
+});
+
+
 
 router.delete("/delete/task/:id", async (req, res) => {
   const taskId = req.params.id;
@@ -47,19 +73,6 @@ router.delete("/delete/task/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao excluir tarefa." });
-  }
-});
-
-router.put("/update/task/:id", async (req, res) => {
-  const { id: taskId } = req.params;
-  const { descricao } = req.body;
-
-  try {
-    const updatedTask = await taskController.taskUpdate(taskId, descricao);
-    res.status(200).json(updatedTask);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao atualizar tarefa." });
   }
 });
 
@@ -86,5 +99,6 @@ router.put('/incomplete/task/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro ao marcar tarefa como não concluída.' });
   }
 });
+
 
 export default router;

@@ -23,6 +23,21 @@ class TaskService {
     }
   }
 
+  async taskListOne(id) {
+    try {
+      const [rows] = await this.connection.execute('SELECT * FROM tasks WHERE id = ?', [id]);
+  
+      if (rows.length === 0) {
+        throw new Error(`Tarefa com ID ${id} não encontrada.`);
+      }
+  
+      return rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error("Erro ao obter tarefa.");
+    }
+  } 
+
   async taskList() {
     try {
       const [rows] = await this.connection.execute('SELECT * FROM tasks');
@@ -34,39 +49,25 @@ class TaskService {
     }
   }
 
-  async taskListOne(id) {
-    try {
-      const [rows] = await this.connection.execute(
-        'SELECT * FROM tasks WHERE id = ?',
-        [id]
-      );
-
-      if (rows.length === 0) {
-        throw new Error(`Tarefa com ID ${id} não encontrada.`);
-      }
-
-      return rows[0];
-    } catch (error) {
-      console.error(error);
-      throw new Error("Erro ao obter tarefa.");
-    }
-  }
-
   async taskUpdate(id, descricao) {
     try {
+      console.log('Updating task with ID:', id);
+      
       await this.connection.execute(
         'UPDATE tasks SET descricao = ? WHERE id = ?',
         [descricao, id]
       );
-
+  
+      console.log('Task updated successfully.');
+  
       const updatedTask = await this.taskListOne(id);
       return updatedTask;
     } catch (error) {
-      console.error(error);
+      console.error('Error updating task:', error);
       throw new Error("Erro ao atualizar tarefa.");
     }
   }
- 
+  
   async taskDelete(id) {
     try {
       const deletedTask = await this.taskListOne(id);
@@ -103,6 +104,6 @@ class TaskService {
     }
   }
 }
-
+0
 
 export default TaskService;

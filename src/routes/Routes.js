@@ -58,13 +58,8 @@ router.put("/update/task/:id", validateTaskId, async (req, res) => {
 });
 
 router.delete("/delete/task/:id", async (req, res) => {
-  const taskId = req.params.id;
-
   try {
-    const deletedTask = await taskController.taskDelete(taskId);
-    res
-      .status(200)
-      .json({ message: "Tarefa excluída com sucesso.", deletedTask });
+    await taskController.taskDelete(req, res);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao excluir tarefa." });

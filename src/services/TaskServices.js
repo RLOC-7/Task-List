@@ -65,12 +65,10 @@ class TaskService {
   }
   
   async taskDelete(id) {
+    const deletedTask = await this.taskListOne(id);
+
     try {
-      const deletedTask = await this.taskListOne(id);
-      await this.connection.execute(
-        'DELETE FROM tasks WHERE id = ?',
-        [id]
-      );
+      await this.connection.execute('DELETE FROM tasks WHERE id = ?',[id]);
       return deletedTask;
     } catch (error) {
       console.error(error);

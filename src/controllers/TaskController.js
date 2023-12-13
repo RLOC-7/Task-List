@@ -68,7 +68,7 @@ class TaskController {
   
   async taskDelete(req, res) {
     const taskId = req.params.id;
-
+  
     try {
       const deletedTask = await taskService.taskDelete(taskId);
       res.status(200).json({ message: "Tarefa excluída com sucesso.", deletedTask });

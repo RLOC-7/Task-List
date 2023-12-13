@@ -10,6 +10,7 @@ class TaskService {
     this.connection = pool;
     
   }
+  
   async addTask({ tarefa, descricao, responsavel }) {
     try {
       const [result] = await pool.execute('INSERT INTO tasks (tarefa, descricao, responsavel) VALUES (?, ?, ?)', [tarefa, descricao, responsavel]);
@@ -51,19 +52,14 @@ class TaskService {
 
   async taskUpdate(id, descricao) {
     try {
-      console.log('Updating task with ID:', id);
-      
       await this.connection.execute(
         'UPDATE tasks SET descricao = ? WHERE id = ?',
         [descricao, id]
       );
   
-      console.log('Task updated successfully.');
-  
-      const updatedTask = await this.taskListOne(id);
-      return updatedTask;
+      console.log('Task updated in the database.');
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error('Error updating task in the database:', error);
       throw new Error("Erro ao atualizar tarefa.");
     }
   }

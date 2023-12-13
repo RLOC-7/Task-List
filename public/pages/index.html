@@ -4,14 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/index.css" />
-    <title>Tarefas</title>
+    <title>Tarefas++</title>
   </head>
   <body>
     <header>
       <nav>
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Cadastro</a></li>
           <li>
             <button id="modoNoturnoBtn" onclick="toggleModoNoturno()">
               Modo Noturno
@@ -21,7 +19,7 @@
       </nav>
     </header>
     <div class="task-form-container">
-      <form action="/add" method="POST" class="task-form">
+      <form action="/add/task" method="POST" class="task-form">
         <div class="form-group">
           <label for="tarefa">Tarefa:</label>
           <input
@@ -57,6 +55,5 @@
     </div>
 
     <script src="utils/modoNoturno.js"></script>
-    <script src="utils/main.js"></script>
   </body>
 </html>

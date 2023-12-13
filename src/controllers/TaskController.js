@@ -1,23 +1,22 @@
 // TaskController.js
-
 import TaskService from "../services/TaskServices.js";
 
 const taskService = new TaskService();
 
 class TaskController {
-  
+
   constructor() {
-    this.taskService = new TaskService();
+    this.taskService = new TaskService();    
   }
 
   async addTask(req, res) {
     try {
       const { tarefa, descricao, responsavel } = req.body;
-      
+
       if (!tarefa || !descricao || !responsavel) {
         throw new Error("Campos 'tarefa', 'descricao' e 'responsavel' são obrigatórios.");
       }
-  
+
       const task = await taskService.addTask({ tarefa, descricao, responsavel });
       res.status(201).json(task);
     } catch (error) {
@@ -25,7 +24,7 @@ class TaskController {
       res.status(400).json({ error: error.message || "Erro ao criar tarefa." });
     }
   }
-  
+
   async taskList(req, res) {
     try {
       const tasks = await this.taskService.taskList();
@@ -45,32 +44,26 @@ class TaskController {
       throw error; // Deixe o tratamento do erro para a rota
     }
   }
-  
-  async taskUpdate(req, res) {
-    console.log('Received PUT request:', req.params, req.body);
 
+  async taskUpdate(id, descricao) {
     try {
-      const { id: taskId } = req.params;
-      console.log('Task ID from params:', taskId);
-    
-      const { descricao } = req.body;
-      console.log('Description from body:', descricao);
-    
-      // Adicione esse log para verificar o conteúdo de taskId antes da chamada da função
-      console.log('Calling taskUpdate with taskId:', taskId);
-    
-      const updatedTask = await this.taskService.taskUpdate(taskId, descricao);
-      res.json(updatedTask);
-    
-    } catch (error) {
-      console.error(error);
-    
-      if (res && typeof res.status === 'function') {
-        res.status(500).json({ error: "Erro ao atualizar tarefa." });
-      } else {
-        console.error("Erro ao manipular resposta. Resposta inválida:", res);
+      console.log('Updating task with ID:', id);
+      
+      // Verifica se id e descricao são definidos antes de executar a consulta
+      if (!id || !descricao) {
+        throw new Error('ID da tarefa ou descrição não fornecidos.');
       }
-    }    
+  
+      await this.taskService.taskUpdate(id, descricao);
+  
+      console.log('Task updated successfully.');
+  
+      const updatedTask = await this.taskListOne(id);
+      return updatedTask;
+    } catch (error) {
+      console.error('Error updating task:', error);
+      throw new Error("Erro ao atualizar tarefa.");
+    }
   }
   
   async taskDelete(req, res) {

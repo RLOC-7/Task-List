@@ -12,6 +12,7 @@
         <ul>
           <li>
             <button id="modoNoturnoBtn" onclick="toggleModoNoturno()">
+              <img src="images/brightness_4_black_24dp.svg" alt="" srcset="" />
               Modo Noturno
             </button>
           </li>
@@ -54,6 +55,14 @@
       </form>
     </div>
 
+    <section class="task-list-container">
+      <h2>Tarefas Cadastradas</h2>
+      <!-- Aqui você pode adicionar a lista de tarefas dinamicamente -->
+      <ul id="taskList" class="task-list">
+
+      </ul>
+    </section>
     <script src="utils/modoNoturno.js"></script>
+    <script src="utils/tasks.js"></script>
   </body>
 </html>

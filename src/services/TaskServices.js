@@ -50,12 +50,20 @@ class TaskService {
     }
   }
 
-  async taskUpdate(id, descricao) {
+  async taskUpdate(id, tarefa, descricao, responsavel, concluido) {
     try {
-      await this.connection.execute(
-        'UPDATE tasks SET descricao = ? WHERE id = ?',
-        [descricao, id]
-      );
+      const params = {
+        tarefa: tarefa || null,
+        descricao: descricao || null,
+        responsavel: responsavel || null,
+        concluido: concluido !== undefined ? concluido : null,
+      };
+  
+      const values = Object.values(params); // Obtemos os valores do objeto
+      values.push(id); // Adicionamos o ID ao final do array
+  
+      const query = 'UPDATE tasks SET tarefa = ?, descricao = ?, responsavel = ?, concluido = ? WHERE id = ?';
+      await this.connection.execute(query, values);
   
       console.log('Task updated in the database.');
     } catch (error) {
@@ -63,7 +71,7 @@ class TaskService {
       throw new Error("Erro ao atualizar tarefa.");
     }
   }
-  
+
   async taskDelete(id) {
     const deletedTask = await this.taskListOne(id);
 
@@ -80,7 +88,7 @@ class TaskService {
     const taskIndex = this.tasks.findIndex(task => task.id === taskId);
 
     if (taskIndex !== -1) {
-      this.tasks[taskIndex].concluida = true;
+      this.tasks[taskIndex].concluida = 1;
       return this.tasks[taskIndex];
     } else {
       throw new Error('Tarefa não encontrada');
@@ -91,13 +99,12 @@ class TaskService {
     const taskIndex = this.tasks.findIndex(task => task.id === taskId);
 
     if (taskIndex !== -1) {
-      this.tasks[taskIndex].concluida = false;
+      this.tasks[taskIndex].concluida = 0;
       return this.tasks[taskIndex];
     } else {
       throw new Error('Tarefa não encontrada');
     }
   }
 }
-0
 
 export default TaskService;

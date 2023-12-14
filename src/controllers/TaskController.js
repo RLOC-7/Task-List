@@ -11,17 +11,17 @@ class TaskController {
 
   async addTask(req, res) {
     try {
-      const { tarefa, descricao, responsavel } = req.body;
-
+      const { tarefa, descricao, responsavel, concluido } = req.body;
+  
       if (!tarefa || !descricao || !responsavel) {
         throw new Error("Campos 'tarefa', 'descricao' e 'responsavel' são obrigatórios.");
       }
-
-      const task = await taskService.addTask({ tarefa, descricao, responsavel });
-      res.status(201).json(task);
+  
+      const newTask = await taskService.addTask({ tarefa, descricao, responsavel, concluido });
+      res.status(201).json({ message: 'Tarefa adicionada com sucesso!', task: newTask.toJSON() });
     } catch (error) {
       console.error(error);
-      res.status(400).json({ error: error.message || "Erro ao criar tarefa." });
+      throw new Error("Erro ao criar tarefa.");
     }
   }
 
@@ -45,16 +45,16 @@ class TaskController {
     }
   }
 
-  async taskUpdate(id, descricao) {
+  async taskUpdate(id, tarefa, descricao, responsavel, concluido) {
     try {
       console.log('Updating task with ID:', id);
-      
-      // Verifica se id e descricao são definidos antes de executar a consulta
-      if (!id || !descricao) {
-        throw new Error('ID da tarefa ou descrição não fornecidos.');
+  
+      // Verifica se id é definido antes de executar a consulta
+      if (!id) {
+        throw new Error('ID da tarefa não fornecido.');
       }
   
-      await this.taskService.taskUpdate(id, descricao);
+      await this.taskService.taskUpdate(id, tarefa, descricao, responsavel, concluido);
   
       console.log('Task updated successfully.');
   

@@ -1,8 +1,7 @@
 // Routes.js
 import express from "express";
 import TaskController from "../controllers/TaskController.js";
-import { router as middlewares, indexPath, validateTaskId } from '../middlewares/middlewares.js';
-
+import { router as middlewares, indexPath, validateTaskId } from '../middlewares/middlewares.js'; 
 
 const taskController = new TaskController();
 const router = express.Router();
@@ -15,7 +14,8 @@ router.get("/", async (req, res) => {
 
 router.post("/add/task", async (req, res) => {
   try {
-    await taskController.addTask(req, res);
+  const taskAdd =  await taskController.addTask(req, res);
+  res.status(201).json(taskAdd)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao criar tarefa." });
@@ -43,13 +43,13 @@ router.get('/list/task', (req, res) => taskController.taskList(req, res));
 router.put("/update/task/:id", validateTaskId, async (req, res) => {
   try {
     const { id } = req.params;
-    const { descricao } = req.body;
+    const { tarefa, descricao, responsavel, concluido } = req.body;
 
-    if (!id || !descricao) {
-      return res.status(400).json({ error: 'ID da tarefa e descrição são obrigatórios.' });
+    if (!id) {
+      return res.status(400).json({ error: 'ID da tarefa é obrigatório.' });
     }
 
-    const updatedTask = await taskController.taskUpdate(id, descricao);
+    const updatedTask = await taskController.taskUpdate(id, tarefa, descricao, responsavel, concluido);
     res.status(200).json(updatedTask);
   } catch (error) {
     console.error(error);
